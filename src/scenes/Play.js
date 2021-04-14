@@ -55,6 +55,8 @@ create(){
     keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
     keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
+    this.p1Score = 0;
+
 }
 //making starfield scroll by moving and phaser provides a function for it to repeat
 update() {
@@ -65,9 +67,18 @@ update() {
     this.ship2.update();
     this.ship3.update();
 
-    this.checkCollision(this.p1Rocket, this.ship1);
-    this.checkCollision(this.p1Rocket, this.ship2);
-    this.checkCollision(this.p1Rocket, this.ship3);
+    if(this.checkCollision(this.p1Rocket, this.ship1)){
+        this.p1Rocket.reset();
+        this.shipExplode(this.ship1);
+    }
+    if(this.checkCollision(this.p1Rocket, this.ship2)){
+        this.p1Rocket.reset();
+        this.shipExplode(this.ship2);
+    }
+    if(this.checkCollision(this.p1Rocket, this.ship3)){
+        this.p1Rocket.reset();
+        this.shipExplode(this.ship3);
+    }
 }
 
 checkCollision(rocket, ship) {
@@ -75,10 +86,22 @@ checkCollision(rocket, ship) {
         rocket.x < ship.x + ship.width && 
         rocket.y + rocket.height > ship.y && 
         rocket.y < ship.y + ship.height){
-            ship.alpha = 0;
-            rocket.reset();
-            ship.reset();
+            return true;
+        } else  {
+            return false;
         }
 }
+shipExplode(ship) {
+    // temporarily hide ship
+    ship.alpha = 0;
+    // create explosion sprite at ship's position
+    let boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0, 0);
+    boom.anims.play('explode');             // play explode animation
+    boom.on('animationcomplete', () => {    // callback after anim completes
+      ship.reset();                         // reset ship position
+      ship.alpha = 1;                       // make ship visible again
+      boom.destroy();                       // remove explosion sprite
+    });       
+  }
 
 }
