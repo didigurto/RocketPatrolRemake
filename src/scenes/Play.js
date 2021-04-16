@@ -92,7 +92,7 @@ update() {
         this.scene.start("menuScene");
     }
 
-    this.starfield.tilePositionX += 4;
+    this.starfield.tilePositionY += 4;
     this.p1Rocket.update();
     
     if(!this.gameOver) {
