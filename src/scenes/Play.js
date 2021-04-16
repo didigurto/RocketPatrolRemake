@@ -91,7 +91,7 @@ update() {
     if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)){
         this.scene.start("menuScene");
     }
-
+    //moves starfield background
     this.starfield.tilePositionY += 4;
     this.p1Rocket.update();
     
